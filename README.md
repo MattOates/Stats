@@ -25,7 +25,7 @@ summary @data;
 #Get the mean/median/mode
 mean @data; median @data; mode @data;
 
-#Get the standard deviation of the data
-sd @data;
+#Get the quartiles/standard deviation of the data
+iqr @data; sd @data;
 
 ```
