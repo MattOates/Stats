@@ -1,7 +1,7 @@
 Stats
 =====
 
-Perl6 statistics modules. Aims to be a partial clone/ripoff of R and Pandas in Python. Currently has some basic statistics functions revolving around averages.
+Perl6 statistics modules. Long term aim is to make a partial clone/ripoff of basic R functionality or Pandas from Python. Currently has some basic statistics functions revolving around averages.
 
 ##Contributing
 Feel free to PR anything you want. Please add some tests to t/ for any new classes/features.
