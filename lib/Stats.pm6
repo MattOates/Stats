@@ -14,7 +14,7 @@ package Stats {
     proto sub median($ --> Real) is export {*}
     multi sub median(Baggy $x --> Real) {
         #TODO Can do a lot better here by sorting by key and consuming half by value
-        #return median($x.kxxv);
+        return median($x.kxxv);
         my $n = ceiling $x.total / 2;
         if ($x.total % 2) {
             for $x.pairs.sort>>.kv -> $val, $freq {
