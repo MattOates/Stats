@@ -4,7 +4,7 @@ package Stats {
     #Mean average
     proto sub mean($ --> Real) is export {*}
     multi sub mean(Baggy $x --> Real) {
-        ( [+] $x.kv.map({$^k * $^v}) ) / $x.total;
+        ( [+] $x.pairs.map({.key * .value}) ) / $x.total;
     }
     multi sub mean(Positional $x --> Real) {
         ( [+] $x.list ) / $x.elems;
@@ -68,7 +68,7 @@ package Stats {
     #Inter-quartile range
     proto sub iqr($ --> Real) is export {*}
     multi sub iqr(Positional $x --> Real) {
-        my ($q1,Nil,$q2) = quartiles($x);
+        my ($q1,Any,$q2) = quartiles($x);
         return $q2-$q1;
     }
 
@@ -76,7 +76,7 @@ package Stats {
     proto sub variance($ --> Real) is export {*}
     multi sub variance(Baggy $x --> Real) {
         my $mean = mean($x);
-        ( [+] $x.kv.map({(($^k - $mean)**2)*$^v}) ) / $x.total;
+        ( [+] $x.pairs.map({ (.key - $mean)**2 * .value}) ) / $x.total;
     }
     multi sub variance(Positional $x --> Real) {
         my $mean = mean($x);
@@ -96,7 +96,7 @@ package Stats {
     proto sub mean-ad($ --> Real) is export {*}
     multi sub mean-ad(Baggy $x --> Real) {
         my $mean = mean($x);
-        ( [+] $x.kv.map({ abs($^k - $mean) *$^v }) ) / $x.total;
+        ( [+] $x.pairs.map({ abs(.key - $mean) * .value }) ) / $x.total;
     }
     multi sub mean-ad(Positional $x --> Real) {
         my $mean = mean($x);
@@ -108,7 +108,7 @@ package Stats {
     multi sub median-ad(Baggy $x --> Real) {
         my $median = median($x);
         #TODO look into using the Bag form of the median here too
-        median( $x.kv.map({ abs($^k - $median) xx $^v }) );
+        median( $x.pairs.map({ abs(.key - $median) xx .value }) );
     }
     multi sub median-ad(Positional $x --> Real) {
         my $median = median($x);
@@ -152,7 +152,7 @@ package Stats {
 
     #Calculate a binned histogram of the data
     proto sub hist($ --> Positional) is export {*}
-    multi sub hist(Positional $x, :$breaks('') --> Positional) {
+    multi sub hist(Positional $x, :$breaks = '' --> Positional) {
         my $bin-width;
         given $breaks {
             when 'Doane' {*} #Looks cool but needs some other dist related functions
