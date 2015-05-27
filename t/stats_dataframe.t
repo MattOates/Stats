@@ -7,7 +7,7 @@ use Stats::DataFrame;
 
 {
     my $model = Stats::DataFrame.new();
-    isa_ok $model, Stats::DataFrame, 'Created DataFrame successfully.';
+    isa-ok $model, Stats::DataFrame, 'Created DataFrame successfully.';
 }
 
 done;

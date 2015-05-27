@@ -7,7 +7,7 @@ use Stats::Models::Linear;
 
 {
     my $model = Stats::Models::Linear.new();
-    isa_ok $model, Stats::Models::Linear, 'Created Linear model successfully.';
+    isa-ok $model, Stats::Models::Linear, 'Created Linear model successfully.';
 }
 
 done;
