@@ -1,7 +1,7 @@
 {
     "name" : "Stats",
-    "version" : "0.0.2",
-    "description" : "Statistics modules for Perl6 inspired by functionality from R and the Pandas library in Python.",
+    "version" : "0.0.3",
+    "description" : "Basic statistics modules for Perl6.",
     "author" : "Matt Oates",
     "depends" : [ ],
     "source-type" : "git",

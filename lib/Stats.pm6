@@ -6,7 +6,7 @@ package Stats {
     multi sub mean(Baggy $x --> Real) {
         ( [+] $x.pairs.map({.key * .value}) ) / $x.total;
     }
-    multi sub mean(Positional $x --> Real) {
+    multi sub mean(List $x --> Real) {
         ( [+] $x.list ) / $x.elems;
     }
 
@@ -14,7 +14,7 @@ package Stats {
     proto sub median($ --> Real) is export {*}
     multi sub median(Baggy $x --> Real) {
         #TODO Can do a lot better here by sorting by key and consuming half by value
-        return median($x.kxxv);
+        return median($x.kxxv.flat.list);
         my $n = ceiling $x.total / 2;
         if ($x.total % 2) {
             for $x.pairs.sort>>.kv -> $val, $freq {
@@ -35,39 +35,39 @@ package Stats {
         }
 
     }
-    multi sub median(Positional $x --> Real) {
-        $x := $x.sort;
-        if ($x.elems % 2) {
-            return 0.0 + $x[$x.elems / 2];
+    multi sub median(List $x --> Real) {
+        my $data = $x.sort.list;
+        if ($data.elems % 2) {
+            return 0.0 + $data[$data.elems / 2];
         } else {
-            return 0.0 + ($x[($x.elems / 2) -1] + $x[$x.elems / 2]) / 2.0
+            return 0.0 + ($data[($data.elems / 2) -1] + $data[$data.elems / 2]) / 2.0
         }
     }
 
     #Mode average
-    proto sub mode($ --> Positional) is export {*}
-    multi sub mode(Baggy $x --> Positional) {
+    proto sub mode($ --> List) is export {*}
+    multi sub mode(Baggy $x --> List) {
         my $mode_freq = $x.values.max;
-        $x.pairs.grep({.value == $mode_freq}).map({.key}).sort;
+        return $x.pairs.grep({.value == $mode_freq}).map({.key}).sort.list;
     }
-    multi sub mode(Positional $x --> Positional) {
-        mode(bag $x.list);
+    multi sub mode(List $x --> List) {
+        return mode($x.Bag);
     }
 
     #Quartiles (Q1, Q2/Median, Q3)
-    proto sub quartiles($ --> Positional) is export {*}
-    multi sub quartiles(Positional $x --> Positional) {
-        $x := $x.sort;
+    proto sub quartiles($ --> List) is export {*}
+    multi sub quartiles(List $x --> List) {
+        my $data = $x.sort.list;
         (
-        median($x[0..floor($x.elems/2)-1]),
-        median($x),
-        median($x[ceiling($x.elems/2)..$x.elems-1])
+        median($data[0 .. floor($data.elems/2)-1]),
+        median($data),
+        median($data[ceiling($data.elems/2) .. $data.elems-1])
         )
     }
 
     #Inter-quartile range
     proto sub iqr($ --> Real) is export {*}
-    multi sub iqr(Positional $x --> Real) {
+    multi sub iqr(List $x --> Real) {
         my ($q1,Any,$q2) = quartiles($x);
         return $q2-$q1;
     }
@@ -78,7 +78,7 @@ package Stats {
         my $mean = mean($x);
         ( [+] $x.pairs.map({ (.key - $mean)**2 * .value}) ) / $x.total;
     }
-    multi sub variance(Positional $x --> Real) {
+    multi sub variance(List $x --> Real) {
         my $mean = mean($x);
         ( [+] $x.map({($_ - $mean)**2}) ) / $x.elems;
     }
@@ -88,7 +88,7 @@ package Stats {
     multi sub sd(Baggy $x --> Real) {
         sqrt(variance($x));
     }
-    multi sub sd(Positional $x --> Real) {
+    multi sub sd(List $x --> Real) {
         sqrt(variance($x));
     }
 
@@ -98,7 +98,7 @@ package Stats {
         my $mean = mean($x);
         ( [+] $x.pairs.map({ abs(.key - $mean) * .value }) ) / $x.total;
     }
-    multi sub mean-ad(Positional $x --> Real) {
+    multi sub mean-ad(List $x --> Real) {
         my $mean = mean($x);
         ( [+] $x.map({ abs($_ - $mean) }) ) / $x.elems;
     }
@@ -108,38 +108,38 @@ package Stats {
     multi sub median-ad(Baggy $x --> Real) {
         my $median = median($x);
         #TODO look into using the Bag form of the median here too
-        median( $x.pairs.map({ abs(.key - $median) xx .value }) );
+        median( $x.pairs.map({ abs(.key - $median) xx .value }).list );
     }
-    multi sub median-ad(Positional $x --> Real) {
+    multi sub median-ad(List $x --> Real) {
         my $median = median($x);
-        median( $x.map({ abs($_ - $median) }) );
+        median( $x.map({ abs($_ - $median) }).list );
     }
 
     #Map data values to their zscores as a list of pairs
-    proto sub zscores($ --> Positional) is export {*}
-    multi sub zscores(Baggy $x --> Positional) {
+    proto sub zscores($ --> List) is export {*}
+    multi sub zscores(Baggy $x --> List) {
         my $mean = mean($x);
         my $sd = sd($x);
-        $x.pairs.map({$_.key => ($_.key - $mean) / $sd }).sort({$^a.value <=> $^b.value});
+        $x.pairs.map({$_.key => ($_.key - $mean) / $sd }).sort({$^a.value <=> $^b.value}).list;
     }
-    multi sub zscores(Positional $x --> Positional) {
+    multi sub zscores(List $x --> List) {
         my $mean = mean($x);
         my $sd = sd($x);
-        $x.map({$_ => ($_ - $mean) / $sd }).sort({$^a.value <=> $^b.value}).squish(as => {.key});
+        $x.map({$_ => ($_ - $mean) / $sd }).sort({$^a.value <=> $^b.value}).squish(as => {.key}).list;
     }
 
     #Get the zscore for a new value given a previous sample of observations
     #This is a common way of ranking new observations on how over or under represented they are given a background
-    proto sub zscore($,$ --> Positional) is export {*}
-    multi sub zscore(Numeric $x, $X where $X.WHAT ~~ Baggy|Positional --> Real) {
+    proto sub zscore($,$ --> List) is export {*}
+    multi sub zscore(Numeric $x, $X where $X.WHAT ~~ Baggy|List --> Real) {
         my $mean = mean($X);
         my $sd = sd($X);
         ($x - $mean) / $sd;
     }
 
     #Summary statistics Rlang style
-    proto sub summary($ --> Positional) is export {*}
-    multi sub summary(Positional $x --> Positional) {
+    proto sub summary($ --> List) is export {*}
+    multi sub summary(List $x --> List) {
         my $median = median($x);
         (
         'mean'=>mean($x),
@@ -151,8 +151,8 @@ package Stats {
     }
 
     #Calculate a binned histogram of the data
-    proto sub hist($ --> Positional) is export {*}
-    multi sub hist(Positional $x, :$breaks = '' --> Positional) {
+    proto sub hist($ --> List) is export {*}
+    multi sub hist(List $x, :$breaks = '' --> List) {
         my $bin-width;
         given $breaks {
             when 'Doane' {*} #Looks cool but needs some other dist related functions
