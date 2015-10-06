@@ -145,8 +145,9 @@ package Stats {
         'mean'=>mean($x),
         'sd'=>sd($x),
         'quartiles'=>quartiles($x),
-        'min'=>min($x),
-        'max'=>max($x)
+        'min'=>$x.min,
+        'max'=>$x.max,
+        'median'=>median($x)
         )
     }
 
