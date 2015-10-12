@@ -1,4 +1,4 @@
-Stats
+Stats [![Build Status](https://travis-ci.org/MattOates/Stats.svg?branch=master)](https://travis-ci.org/MattOates/Stats)
 =====
 
 Perl6 statistics modules. Long term aim is to make a partial clone/ripoff of basic R functionality or Pandas from Python. Currently has some basic statistics functions revolving around averages.
