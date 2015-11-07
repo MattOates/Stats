@@ -27,5 +27,4 @@ use Stats;
     ok zscores(@list_x) == zscores($baggy_x), 'Z-scores for Bag and List is identical.';
     ok zscore(10,@list_x) == zscore(10,$baggy_x), 'Z-score given background for Bag and List is identical.';
 }
-
-done;
+done-testing;
