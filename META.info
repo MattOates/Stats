@@ -1,4 +1,5 @@
 {
+    "perl" : "6.*",
     "name" : "Stats",
     "version" : "0.0.4",
     "description" : "Basic statistics modules for Perl6.",
