@@ -92,6 +92,19 @@ package Stats {
         sqrt(variance($x));
     }
 
+    #Covariance coefficient
+    sub cov(@x, @y --> Real) is export {
+        1 / @x.elems * [+]((@x »-» mean(@x)) Z* (@y »-» mean(@y)));
+    }
+
+    #Correlation coefficient
+    sub corrcoef(@x, @y --> Real) is export {
+        fail 'Standard deviation for both iterables must be greater than 0' 
+            if any(sd(@x),sd(@y)) == 0;
+
+        cov(@x, @y) / (sd(@x) * sd(@y));
+    }
+
     #Mean Absolute Deviation
     proto sub mean-ad($ --> Real) is export {*}
     multi sub mean-ad(Baggy $x --> Real) {
