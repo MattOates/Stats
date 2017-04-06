@@ -3,6 +3,8 @@
     "version" : "0.0.4",
     "description" : "Basic statistics modules for Perl6.",
     "author" : "Matt Oates",
+    "tags" : [ "Stats", "Statistics", "Maths", "Math" ],
+    "perl" : "6.c",
     "depends" : [ ],
     "source-type" : "git",
     "source-url" : "git://github.com/MattOates/Stats.git",
