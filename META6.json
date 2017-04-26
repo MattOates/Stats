@@ -2,7 +2,7 @@
     "name" : "Stats",
     "version" : "0.0.5",
     "description" : "Basic statistics modules for Perl6.",
-    "auth" : "github:MattOates"
+    "auth" : "github:MattOates",
     "authors" : [
         "Matt Oates <mattoates@gmail.com>",
         "Paweł Szulc",
@@ -16,7 +16,7 @@
     "license" : "Artistic-2.0",
     "provides" : {
         "Stats" : "lib/Stats.pm6"
-    }
+    },
     "support" : {
         "bugtracker" : "https://github.com/MattOates/Stats/issues",
         "source" : "git://github.com/MattOates/Stats.git"
