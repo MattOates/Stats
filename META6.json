@@ -1,6 +1,7 @@
 {
     "name" : "Stats",
     "version" : "0.0.5",
+    "license" : "Artistic-2.0",
     "description" : "Basic statistics modules for Perl6.",
     "auth" : "github:MattOates",
     "authors" : [
