@@ -14,7 +14,6 @@
     "depends" : [ ],
     "source-type" : "git",
     "source-url" : "git://github.com/MattOates/Stats.git",
-    "license" : "Artistic-2.0",
     "provides" : {
         "Stats" : "lib/Stats.pm6"
     },
