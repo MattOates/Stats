@@ -3,7 +3,8 @@ Stats [![Build Status](https://travis-ci.org/MattOates/Stats.svg?branch=master)]
 
 Perl6 statistics modules. Currently has some basic statistics functions revolving around averages.
 
-##Contributing
+## Contributing
+
 Feel free to PR anything you want. Please add some tests to t/ for any new classes/features.
 You can run the tests by doing:
 
@@ -11,7 +12,7 @@ You can run the tests by doing:
 prove -e 'perl6 -I ./lib' -lrv t/
 ```
 
-##Examples
+## Examples
 
 ```perl6
 use v6;
